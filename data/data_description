@@ -1,0 +1,13 @@
+training_data
+
+Graph          direction        #node        #edges
+
+google         directed         875713       4322051        
+youtube        undirected       1134890      2987624
+wiki           directed         7115         100762
+hepph          directed         12008        118489
+egofb          undirected       4039         88234
+hepth          directed         27770        352285
+public         undirected       1097077      10792894
+
+
