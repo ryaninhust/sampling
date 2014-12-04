@@ -26,8 +26,9 @@ def search_by_id(G,node_id):
 		graph_array.append((i,nx.degree(G,i)))
 		f.write(i + ' ' + str(nx.degree(G,i))+'\n')
 	f.close()
+
+G = read_graph()
 def main():
-	G = read_graph()
 	search_by_id(G,'2014')
 
 if __name__ == '__main__':
