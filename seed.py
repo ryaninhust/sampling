@@ -11,14 +11,14 @@ def generate_seed_graph(origin_graph, k):
     vcounts = g.vcount()
     init_seed = random.randint(0, vcounts)
 
-    seed_graph = Graph()
+    seed_graph = Graph(directed=False)
     seed_graph.add_vertex(init_seed)
     degree_dict[init_seed] = g.neighborhood_size(init_seed) - 1
 
     while seed_graph.vcount() != k:
         choiced_vertex = random.choice(seed_graph.vs)
         choiced_neighor = random.choice(g.neighbors(choiced_vertex['name']))
-        if str(choiced_neighor) in seed_graph.vs['name']:
+        if choiced_neighor in seed_graph.vs['name']:
             continue
         seed_graph.add_vertex(choiced_neighor)
         degree_dict[choiced_neighor] = g.neighborhood_size(choiced_neighor) - 1
@@ -35,7 +35,8 @@ def generate_seed_graph(origin_graph, k):
     return seed_graph, degree_dict
 
 if __name__ == "__main__":
-    seed_graph, degrees = generate_seed_graph('data/egofb.txt', 2)
-    print seed_graph.vs['name']
+    seed_graph, degrees = generate_seed_graph('data/egofb.txt', 100)
+    print seed_graph.degree()
+    #print seed_graph.vs['name']
     print seed_graph.get_edgelist()
-    print degrees
+    #print degrees
