@@ -1,7 +1,9 @@
 # Byte-compiled / optimized / DLL files
 .DS_Store
+.ropeproject
 __pycache__/
 *.py[cod]
+venv/
 
 # C extensions
 *.so
