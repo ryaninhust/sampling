@@ -1,4 +1,3 @@
-import sys
 import networkx as nx
 import random
 
@@ -16,9 +15,6 @@ def read_graph():
 	return G
 
 def search_by_id(G,node_id):
-	graph_array = []
-	#f = open('node_node.txt','w')
-	#f.write('\n' + '\n' + node_id +' '+ str(nx.degree(G,node_id))+'\n')
 	nodes_list = []
 	node_dict = {}
 	node_dict['name'] = node_id
