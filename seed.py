@@ -3,10 +3,7 @@ import random
 from igraph import Graph
 
 
-def generate_seed_graph(origin_graph, k):
-    g = Graph.Read_Ncol(origin_graph, directed=False)
-    g = g.simplify()
-
+def generate_seed_graph(g, k):
     vcounts = g.vcount()
     init_seed = random.randint(0, vcounts)
 

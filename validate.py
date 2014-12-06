@@ -1,13 +1,10 @@
 from collections import Counter
 
-from igraph import Graph
 from pymongo import MongoClient
 from scipy.stats import entropy
 
 mc = MongoClient()
 db = mc.test
-
-GRAPH_PAHT_PARSE = 'data/%s.txt'
 
 
 def generate_dis(value_list):
@@ -17,12 +14,12 @@ def generate_dis(value_list):
 def merge_dis(counter1, counter2):
     key_list1 = counter1.keys()
     key_list2 = counter2.keys()
-    merged_key_list =  set(key_list1) & set(key_list2)
+    merged_key_list =  set(key_list1) | set(key_list2)
     return merged_key_list
 
 
 def transform_dis(counter, merged_key_list):
-    return [counter[key] for key in merged_key_list]
+    return [counter.get(key, 0.001) for key in merged_key_list]
 
 
 def valide_dis(origin_dis, test_dis):
@@ -44,7 +41,7 @@ def fetch_origin_degs_list(collection):
     return degs
 
 
-def valide_degree(g, graph_name):
+def validate_degree(g, graph_name):
     collection = db[graph_name]
     origin_counter = generate_dis(fetch_origin_degs_list(collection))
     sampling_counter = generate_dis(fetch_degs_list(g))
@@ -56,7 +53,7 @@ def valide_degree(g, graph_name):
     return 0.5 * (os + so)
 
 
-def valide_closeness(g, graph_name):
+def validate_closeness(g, graph_name):
     collection = db[graph_name]
     sampled_graph_closeness_tuple = []
     for v in g.vs[:100]:
@@ -71,8 +68,6 @@ def valide_closeness(g, graph_name):
 
 
 def validate_sampling(sampled_graph, graph_name):
-    g = Graph.Read_Ncol(GRAPH_PAHT_PARSE % graph_name, directed=False)
-    g = g.simplify()
-    close_validate = valide_closeness(g, graph_name)
-    kl = valide_degree(g, graph_name)
-    print close_validate, kl
+    close_validate = validate_closeness(sampled_graph, graph_name)
+    kl = validate_degree(sampled_graph, graph_name)
+    return close_validate, kl

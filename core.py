@@ -15,13 +15,13 @@ class Algorithm(object):
         raise NotImplementedError
 
     def _validate(self):
-        close_validate, kl = validate_sampling(self.sampled_graph, self.origin_graph)
+        close_validate, kl = validate_sampling(self.sampled_graph, self.egraph.name)
         return close_validate, kl
 
-    def validate(self):
-        self.sampled_graph = self.run()
-        if not self.sampled_graph:
-            raise AlgorithmNoResultError
-        close_validate, kl = self._validate
+    def validate(self, k=100):
+        self.run(k)
+        #if self.sampled_graph.vcount() == self.egraph.seed_graph.vcount():
+        #    raise AlgorithmNoResultError
+        close_validate, kl = self._validate()
         return close_validate, kl
 

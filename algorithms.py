@@ -1,5 +1,12 @@
 from random import choice, randrange
 from core import Algorithm
+from egraphs import FBEgoGraph
+
+class TestAlgorithm(Algorithm):
+
+    def run(self, k):
+        return
+
 
 class FirstSearchAlgorithm(Algorithm):
 
@@ -24,7 +31,6 @@ class FirstSearchAlgorithm(Algorithm):
         q_len = len(self.queue)
         return self.queue.pop(randrange(0, q_len))
 
-
     def run(self, k):
         for t in range(k):
             node = self.pop_method()
@@ -35,3 +41,9 @@ class FirstSearchAlgorithm(Algorithm):
                     self.sampled_graph.add_vertex(node['name'], i['name'])
                 elif i['name'] not in [n['name'] for n in self.queue]:
                     self.queue.append(i)
+
+if __name__ == "__main__":
+    fbego_graph = FBEgoGraph('data/egofb.txt')
+    fuck_ta = TestAlgorithm(fbego_graph)
+    clossness, kl = fuck_ta.validate()
+    print clossness, kl
