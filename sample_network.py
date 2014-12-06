@@ -8,10 +8,9 @@ def random_walk(G,node,times):
 	sub_G.add_node(node)
 	while i < times:
 		neighbors = nx.neighbors(G,node)
+		for s in neighbors:
+			sub_G.add_edge(node,s)
 		new_node =  random.choice(neighbors)
-		sub_G.add_node(new_node)
-		sub_G.add_edge(node,new_node)
-		#print node,new_node
 		node = new_node
 		i += 1
 	return sub_G
@@ -23,11 +22,10 @@ def metropolis_hastings_random_walk(G,node):
 	sub_G.add_node(node)
 	while i < times:
 		neighbors = nx.neighbors(G,node)
+		for s in neighbors:
+			sub_G.add_edge(node,s)
 		new_node =  random.choice(neighbors)
 		if random.random() <= float(G.degree(node))/G.degree(new_node):
-			sub_G.add_node(new_node)
-			sub_G.add_edge(node,new_node)
-			#print node,new_node
 			node = new_node
 		i += 1
 	return sub_G
@@ -39,7 +37,6 @@ def multiple_independent_random_walk(G):
 	node_set = random.sample(G.nodes(),10)
 	for s in node_set:
 		graph_sub = random_walk(G,s,times)
-		print graph_sub.edges()
 		sub_G.add_edges_from(graph_sub.edges(data=True))
 	return sub_G
 
@@ -58,9 +55,9 @@ def random_jump(G,node):
 			node = new_node
 		else:
 			neighbors = nx.neighbors(G,node)
+			for s in neighbors:
+				sub_G.add_edge(node,s)
 			new_node =  random.choice(neighbors)
-			sub_G.add_node(new_node)
-			sub_G.add_edge(node,new_node)
 			node = new_node		
 		i += 1
 	return sub_G
@@ -79,10 +76,10 @@ def albatross_sampling(G,node):
 			node = new_node
 		else:
 			neighbors = nx.neighbors(G,node)
+			for s in neighbors:
+				sub_G.add_edge(node,s)
 			new_node =  random.choice(neighbors)
 			if random.random() <= float(G.degree(node))/G.degree(new_node):
-				sub_G.add_node(new_node)
-				sub_G.add_edge(node,new_node)
 				node = new_node
 		i += 1
 	return sub_G
@@ -95,10 +92,8 @@ def uniform_independent_sample(G):
 		node = random.choice(G.nodes())
 		if node in G:
 			neighbors = nx.neighbors(G,node)
-			new_node =  random.choice(neighbors)
-			sub_G.add_node(node)
-			sub_G.add_node(new_node)
-			sub_G.add_edge(node,new_node)
+			for s in neighbors:
+				sub_G.add_edge(node,s)
 		i += 1
 	return sub_G
 
@@ -122,10 +117,9 @@ def frontier_sampling(G): # Also called multi-dimensional random walk(MDRW)
 					node = node_set[j]
 					break
 		neighbors = G.neighbors(node)
+		for s in neighbors:
+				sub_G.add_edge(node,s)
 		new_node =  random.choice(neighbors)
-		sub_G.add_node(node)
-		sub_G.add_node(new_node)
-		sub_G.add_edge(node,new_node)
 		node_set[j] = new_node
 		i += 1
 	return sub_G
@@ -146,23 +140,24 @@ def main():
 	# 1.random walk
 	'''sub_G = random_walk(G,node,100)	
 	print sub_G.nodes(),sub_G.edges()
-	# 2.metropolis_hastings_random_walk
-	sub_G = metropolis_hastings_random_walk(G,node)
+	# 2.metropolis_hastings_random_walk'''
+	'''sub_G = metropolis_hastings_random_walk(G,node)
+	print sub_G.nodes(),sub_G.edges()'''
 	# 3.albatross_sampling
-	sub_G = albatross_sampling(G,node)
+	'''sub_G = albatross_sampling(G,node)
 	print sub_G.nodes(),sub_G.edges()
 	# 4.uniform_independent_sampling RNN
 	sub_G = uniform_independent_sample(G) 
-	print sub_G.nodes(),sub_G.edges()
-	# 5.random jump RWE
-	sub_G = random_jump(G,node)
-	print sub_G.nodes(),sub_G.edges()
-	# 6.frontier sampling/MDRW
-	sub_G = frontier_sampling(G)
 	print sub_G.nodes(),sub_G.edges()'''
+	# 5.random jump RWE
+	'''sub_G = random_jump(G,node)
+	print sub_G.nodes(),sub_G.edges()'''
+	# 6.frontier sampling/MDRW
+	'''sub_G = frontier_sampling(G)
+	print sub_G.nodes(),sub_G.edges()
 	# 7. multiple independent random walk
 	sub_G = multiple_independent_random_walk(G)
-	print sub_G.nodes(),sub_G.edges()
+	print sub_G.nodes(),sub_G.edges()'''
 
 if __name__ == '__main__':
 	main()
