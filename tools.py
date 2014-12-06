@@ -14,10 +14,12 @@ def write_answer_into_mongo(graph_name):
             id_, clo = line.strip().split(' ')
             c = collection.find_one({'node_id': id_})
             if not c:
-                c = {'node_id': id_, 'closeness': clo, 'order': line_id+1}
+                c = {'node_id': id_, 'closeness': clo, 'order': line_id+1,
+                     'degree': 0}
             else:
                 c['closeness'] = clo
                 c['order'] = line_id + 1
+                c['degree'] = 0
             collection.save(c)
 
     with open(DEG_PATH_PARSE % graph_name) as deg:
@@ -32,8 +34,11 @@ def write_answer_into_mongo(graph_name):
 
 
 if __name__ == '__main__':
+    write_answer_into_mongo('egofb')
+    '''
     import os
     graphs = os.listdir('answer')
     for g in graphs:
         write_answer_into_mongo(g)
         print "======%s has writed ======" % g
+    '''

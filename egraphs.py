@@ -8,6 +8,7 @@ class EGraph(object):
     def __init__(self, path):
         self.path = path
         self._seed_graph = None
+        self._g = None
 
     def query_node(self, name):
         raise NotImplementedError
@@ -25,6 +26,7 @@ class EGraph(object):
 
 
 class FBEgoGraph(EGraph):
+    name = 'egofb'
 
     #TODO Yu Ran unitlize his api
     def query_node(self, node_name):
@@ -33,6 +35,6 @@ class FBEgoGraph(EGraph):
     @property
     def seed_graph(self):
         if not self._seed_graph:
-            self._seed_graph = generate_seed_graph(self.g, 100)
+            self._seed_graph = generate_seed_graph(self.origin_graph, 100)
         return self._seed_graph
 
