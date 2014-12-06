@@ -17,13 +17,23 @@ def read_graph():
 
 def search_by_id(G,node_id):
 	graph_array = []
-	f = open('node_node.txt','w')
-	f.write('\n' + '\n' + node_id +' '+ str(nx.degree(G,node_id))+'\n')
+	#f = open('node_node.txt','w')
+	#f.write('\n' + '\n' + node_id +' '+ str(nx.degree(G,node_id))+'\n')
+	nodes_list = []
+	node_dict = {}
+	node_dict['name'] = node_id
+	node_dict['degree'] = nx.degree(G,node_id)
+	for i in xrange(5):
+		node_dict['attr_'+str(i)] = str(0)
+	nodes_list.append(node_dict)
 	neigh =  nx.neighbors(G,node_id)
 	for i in neigh:
-		graph_array.append((i,nx.degree(G,i)))
-		f.write(i + ' ' + str(nx.degree(G,i))+'\n')
-	f.close()
+		node_dict['name'] = i
+		node_dict['degree'] = nx.degree(G,i)
+		for i in xrange(5):
+			node_dict['attr_'+str(i)] = str(0)
+		nodes_list.append(node_dict)
+	return nodes_list
 
 class Gene_Graph():
 	__instance = None
@@ -35,6 +45,6 @@ class Gene_Graph():
 
 def main():
 	G = Gene_Graph.get_graph()
-	search_by_id(G,'1')
+	print search_by_id(G,'1')
 if __name__ == '__main__':
 	main()
