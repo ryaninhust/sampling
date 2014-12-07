@@ -41,11 +41,12 @@ class ForestFire(Algorithm):
                         query_result = self.egraph.query_node(node,n_attribute)
                         k = k - 1
                         unvisit = [q for q in query_result if not self.exist_edge(node, q['name'])]
+                        if unvisit:
                         # update_graph(all_graph,node,unvisit)
-                        z = sample(range(len(unvisit)),1)[0]
-                        query_sample = sample(unvisit,z)
-                        self.update_graph(node, query_sample)
-                        new_node = new_node + [n['name'] for n in query_sample]
+                            z = sample(range(len(unvisit)),1)[0]
+                            query_sample = sample(unvisit,z)
+                            self.update_graph(node, query_sample)
+                            new_node = new_node + [n['name'] for n in query_sample]
                     else:
                         break
             else:
