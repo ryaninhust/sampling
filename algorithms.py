@@ -4,6 +4,8 @@ from egraphs import FBEgoGraph
 
 class TestAlgorithm(Algorithm):
 
+    name = "test_algorithm"
+
     def run(self, k):
         return
 
@@ -11,7 +13,7 @@ class TestAlgorithm(Algorithm):
 class FirstSearchAlgorithm(Algorithm):
 
     def __init__(self, egraph, pop_method):
-        super(FirstSearchAlgorithm, self).__init(egraph)
+        super(FirstSearchAlgorithm, self).__init__(egraph)
         self.init_queue()
         self.pop_method = getattr(self, pop_method)
 
@@ -35,15 +37,21 @@ class FirstSearchAlgorithm(Algorithm):
         for t in range(k):
             node = self.pop_method()
             self.sampled_graph.add_vertex(**node)
+            node_id = self.sampled_graph.vs.find(name=node['name'])
             node_neighours = self.egraph.query_node(node['name'])
             for i in node_neighours:
-                if i['name'] in self.sampled_graph:
-                    self.sampled_graph.add_vertex(node['name'], i['name'])
+                if i['name'] in self.sampled_graph.vs['name']:
+                    neighbor_id = self.sampled_graph.vs.find(name=i['name'])
+                    self.sampled_graph.add_edge(neighbor_id, node_id)
                 elif i['name'] not in [n['name'] for n in self.queue]:
                     self.queue.append(i)
 
 if __name__ == "__main__":
     fbego_graph = FBEgoGraph('data/egofb.txt')
-    fuck_ta = TestAlgorithm(fbego_graph)
-    clossness, kl = fuck_ta.validate()
-    print clossness, kl
+    fuck_fa = FirstSearchAlgorithm(fbego_graph, 'depth_first')
+    print fuck_fa.validate()
+#    fuck_ta = TestAlgorithm(fbego_graph)
+#    print fuck_ta.validate()
+#    fuck_ta.output_submission()
+
+
