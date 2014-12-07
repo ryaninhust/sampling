@@ -49,9 +49,9 @@ class ForestFire(Algorithm):
                             new_node = new_node + [n['name'] for n in query_sample]
                     else:
                         break
+                start_seeds = new_node
             else:
                 start_seeds = [choice(self.sampled_graph.vs['name'])]
-            start_seeds = new_node
 
 
 if __name__ == "__main__":
