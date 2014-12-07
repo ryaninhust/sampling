@@ -21,20 +21,21 @@ class EGraph(object):
         return self._g
 
     @property
-    def query_seed_graph(self):
+    def seed_graph(self):
         raise NotImplementedError
 
 
 class FBEgoGraph(EGraph):
     name = 'egofb'
 
-    #TODO Yu Ran unitlize his api
-    def query_node(self, node_name):
-        return None
+    def query_node(self, node_name, n_attribute):
+        node = self.origin_graph.vs.find(name=node_name)
+        return [n.attributes() for n in node.neighbors()]
 
     @property
     def seed_graph(self):
         if not self._seed_graph:
             self._seed_graph = generate_seed_graph(self.origin_graph, 100)
         return self._seed_graph
+
 

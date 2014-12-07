@@ -22,7 +22,7 @@ class SnowBallSampling(Algorithm):
         wave = 1
         n_attribute = len(self.sampled_graph.vertex_attributes())-2
         #all_graph = self.sampled_graph.copy()
-    
+
         while k>0:
             new_node = []
             if start_seeds:
@@ -38,7 +38,7 @@ class SnowBallSampling(Algorithm):
                             valid_result = [q for q in query_result if q['name'] not in self.sampled_graph.vs['name']]
                             n_influence = min(n_influence,len(valid_result))
                             # additional coupons were given only under two conditions
-                            if n_influence == quota and random()<0.6**quota: 
+                            if n_influence == quota and random()<0.6**quota:
                                 n_influence = min(quota*2,valid_result)
                             query_sample = sample(valid_result,n_influence)
                             update_graph(self.sampled_graph,node,query_sample)

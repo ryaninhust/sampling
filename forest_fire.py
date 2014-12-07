@@ -12,10 +12,7 @@ class ForestFire(Algorithm):
             index1 = g.vs['name'].index(node1)
             index2 = g.vs['name'].index(node2)
             has_edge = g.get_eid(index1, index2, directed=False, error=False)
-            if has_edge == -1:
-                return False
-            else:
-                return True
+            return has_edge != -1
 
     def update_graph(g, start_node, result):
         start_id = g.vs['name'].index(start_node)
@@ -33,7 +30,7 @@ class ForestFire(Algorithm):
         start_seeds = [choice(self.sampled_graph.vs['name'])]
         n_attribute = len(self.sampled_graph.vertex_attributes())-2
         #all_graph = self.sampled_graph.copy()
-    
+
         while k > 0:
             new_node = []
             if start_seeds:
