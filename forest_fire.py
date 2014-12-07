@@ -5,7 +5,8 @@ from core import Algorithm
 
 class ForestFire(Algorithm):
 
-    def exist_edge(g, node1, node2):
+    def exist_edge(self, node1, node2):
+        g = self.sampled_graph
         if node2 not in g.vs['name']:
             return False
         else:
@@ -14,7 +15,8 @@ class ForestFire(Algorithm):
             has_edge = g.get_eid(index1, index2, directed=False, error=False)
             return has_edge != -1
 
-    def update_graph(g, start_node, result):
+    def update_graph(self, start_node, result):
+        g = self.sampled_graph
         start_id = g.vs['name'].index(start_node)
         for node in result:
             if node['name'] not in g.vs['name']:
@@ -36,13 +38,13 @@ class ForestFire(Algorithm):
             if start_seeds:
                 for node in start_seeds:
                     if k > 0:
-                        query_result = query_single_node(node,n_attribute)
+                        query_result = self.egraph.query_node(node,n_attribute)
                         k = k - 1
-                        unvisit = [q for q in query_result if not exist_edge(self.sampled_graph, node, q['name'])]
+                        unvisit = [q for q in query_result if not self.exist_edge(node, q['name'])]
                         # update_graph(all_graph,node,unvisit)
                         z = sample(range(len(unvisit)),1)[0]
                         query_sample = sample(unvisit,z)
-                        update_graph(self.sampled_graph,node,query_sample)
+                        self.update_graph(node, query_sample)
                         new_node = new_node + [n['name'] for n in query_sample]
                     else:
                         break
@@ -50,3 +52,8 @@ class ForestFire(Algorithm):
                 start_seeds = [choice(self.sampled_graph.vs['name'])]
             start_seeds = new_node
 
+
+if __name__ == "__main__":
+    fbego_graph = FBEgoGraph('data/egofb.txt')
+    fuck_ff = ForestFire(fbego_graph)
+    print fuck_ff.validate()
