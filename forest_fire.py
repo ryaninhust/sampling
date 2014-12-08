@@ -39,6 +39,8 @@ class ForestFire(Algorithm):
                 for node in start_seeds:
                     if k > 0:
                         query_result = self.egraph.query_node(node,n_attribute)
+                        in_graph = [q for q in query_result if q['name'] in self.sampled_graph.vs['name']]
+                        self.update_graph(node, in_graph)
                         k = k - 1
                         unvisit = [q for q in query_result if not self.exist_edge(node, q['name'])]
                         if unvisit:
