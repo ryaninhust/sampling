@@ -2,12 +2,19 @@ from random import choice, randrange
 from core import Algorithm
 from egraphs import FBEgoGraph
 
-class TestAlgorithm(Algorithm):
+class BruteAlgorithm(Algorithm):
 
     name = "test_algorithm"
 
     def run(self, k):
-        return
+        for t in range(k):
+            node = choice(self.sampled_graph.vs)
+            node_neighours = self.egraph.query_node(node['name'], 0)
+            for i in node_neighours:
+                if i['name'] not in self.sampled_graph.vs['name']:
+                    self.sampled_graph.add_vertex(i['name'])
+                    neighbour_id = self.sampled_graph.vs.find(name=i['name'])
+                    self.sampled_graph.add_edge(node.index, neighbour_id)
 
 
 class FirstSearchAlgorithm(Algorithm):
@@ -19,9 +26,11 @@ class FirstSearchAlgorithm(Algorithm):
 
     def init_queue(self):
         init_node = choice(self.sampled_graph.vs)
-        node_neighours = self.egraph.query_node(init_node['name'])
+        node_neighours = self.egraph.query_node(init_node['name'], 0)
         self.queue = [n for n in node_neighours
                       if n['name'] not in self.sampled_graph.vs['name']]
+        if not self.queue:
+            self.init_queue()
 
     def depth_first(self):
         return self.queue.pop()
@@ -35,10 +44,12 @@ class FirstSearchAlgorithm(Algorithm):
 
     def run(self, k):
         for t in range(k):
+            if not self.queue:
+                self.init_queue()
             node = self.pop_method()
             self.sampled_graph.add_vertex(**node)
             node_id = self.sampled_graph.vs.find(name=node['name'])
-            node_neighours = self.egraph.query_node(node['name'])
+            node_neighours = self.egraph.query_node(node['name'], 0)
             for i in node_neighours:
                 if i['name'] in self.sampled_graph.vs['name']:
                     neighbor_id = self.sampled_graph.vs.find(name=i['name'])
