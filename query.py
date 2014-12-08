@@ -82,4 +82,4 @@ def parse_neighours(line, node_attr_count):
 
 
 if __name__ == "__main__":
-    print query_single_node(1, 5)[0]
+    print query_seed()

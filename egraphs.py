@@ -1,6 +1,7 @@
 from igraph import Graph
 
 from seed import generate_seed_graph
+from query import query_seed
 
 
 class EGraph(object):
@@ -26,11 +27,12 @@ class EGraph(object):
 
 
 class FBEgoGraph(EGraph):
-    name = 'egofb'
+    name = 'public'
 
     def query_node(self, node_name, n_attribute):
         node = self.origin_graph.vs.find(name=node_name)
-        return [n.attributes() for n in node.neighbors()]
+        result = [{'name': n['name'], 'degree': n.degree()} for n in node.neighbors()]
+        return result
 
     @property
     def seed_graph(self):
@@ -38,4 +40,16 @@ class FBEgoGraph(EGraph):
             self._seed_graph = generate_seed_graph(self.origin_graph, 100)
         return self._seed_graph
 
+class RemoteGraph(EGraph):
+    name = 'public'
+
+    def query_node(self, node_name, n_attribute):
+        node = self.origin_graph.vs.find(name=node_name)
+        result = [{'name': n['name'], 'degree': n.degree()} for n in node.neighbors()]
+        return result
+    @property
+    def seed_graph(self):
+        if not self._seed_graph:
+            self._seed_graph = query_seed()[0]
+        return self._seed_graph
 

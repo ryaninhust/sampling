@@ -18,6 +18,8 @@ class Algorithm(object):
         self.sampled_graph = egraph.seed_graph.copy()
         self.origin_graph = egraph.origin_graph
 
+    def __str__(self):
+        return self.name
     def run(self, k, **kwarg):
         raise NotImplementedError
 
@@ -25,7 +27,7 @@ class Algorithm(object):
         close_validate, kl = validate_sampling(self)
         return close_validate, kl
 
-    def validate(self, k=100):
+    def validate(self, k=300):
         self.run(k)
         #if self.sampled_graph.vcount() == self.egraph.seed_graph.vcount():
         #    raise AlgorithmNoResultError
@@ -35,7 +37,7 @@ class Algorithm(object):
         return close_validate, kl
 
     def cal_sample_degree_dist(self):
-        sampled_degree = self.sampled_graph.degree()
+        sampled_degree = [int(v['degree']) for v in self.sampled_graph.vs]
         self.degree_dis = self.cal_degree_dist(sampled_degree)
 
     def cal_degree_dist(self, degree):
@@ -70,7 +72,7 @@ class Algorithm(object):
         rank_clossness = []
         for v in self.sampled_graph.vs:
             rank_clossness.append((v['name'], v.closeness()))
-        rank_clossness.sort(reverse=True, key=lambda x: x[1])
+        rank_clossness.sort(key=lambda x: x[1], reverse=True)
         self.top_k_closeness = rank_clossness[:self.top_k]
     def output_submission(self):
         path = 'result/%s_%s' % (self.name, self.egraph.name)
