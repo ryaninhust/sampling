@@ -22,7 +22,7 @@ class MIRandomWalk(Algorithm):
     def run(self,k,m=10):
         n_attribute = len(self.sampled_graph.vertex_attributes())-2
         i = 0
-        node_set = random.sample(self.sampled_graph.vs['name'],m)
+        node_set = sample(self.sampled_graph.vs['name'],m)
 
         while i < k:
             query_result = self.egraph.query_node(start_node,n_attribute)

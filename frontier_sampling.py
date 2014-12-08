@@ -20,7 +20,7 @@ class MDRandomWalk(Algorithm):
 
     def run(self,k,m = 10):
         degree_sum = 0
-        node_set = random.sample(self.sampled_graph.vs['name'],m)
+        node_set = sample(self.sampled_graph.vs['name'],m)
         for sv in node_set:
             degree_sum += g.degree(str(sv))
 

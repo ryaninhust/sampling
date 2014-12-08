@@ -29,7 +29,7 @@ class AlbatrossSampling(Algorithm):
             self.update_graph(start_node,new_node)
             if random() < p_jump:
                 start_node = choice(self.sampled_graph.vs['name'])
-            elif random() < float(self.sampled_graph.degree(start_node))/self.sampled_graph.degree(new_node):
+            elif random() < float(self.sampled_graph.degree(start_node))/self.sampled_graph.degree(new_node['name']):
                 start_node = new_node['name']
             i += 1
 

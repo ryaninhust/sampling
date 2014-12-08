@@ -27,7 +27,7 @@ class MHRandomWalk(Algorithm):
             query_result = self.egraph.query_node(start_node,n_attribute)
             new_node = choice(query_result)
             self.update_graph(start_node,new_node)
-            if random() < float(self.sampled_graph.degree(start_node))/self.sampled_graph.degree(new_node):
+            if random() < float(self.sampled_graph.degree(start_node))/self.sampled_graph.degree(new_node['name']):
                 start_node = new_node['name']
             i += 1
 
