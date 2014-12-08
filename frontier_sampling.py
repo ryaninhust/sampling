@@ -20,9 +20,9 @@ class MDRandomWalk(Algorithm):
 
     def run(self,k,m = 10):
         degree_sum = 0
-        node_set = random.sample(self.sampled_graph.vs['name'],m)
+        node_set = sample(self.sampled_graph.vs['name'],m)
         for sv in node_set:
-            degree_sum += g.degree(str(sv))
+            degree_sum += self.sampled_graph.degree(sv)
 
         n_attribute = len(self.sampled_graph.vertex_attributes())-2
         i = 0
@@ -33,9 +33,12 @@ class MDRandomWalk(Algorithm):
                     start_node = node_set[-1]
                     break
                 else:
-                    if random() >= G.degree(str(node_set[j]))/degree_sum and alpha < G.degree(str(node_set[j+1]))/degree_sum:
+                    ra = random()
+                    if ra >= self.sampled_graph.degree(str(node_set[j]))/degree_sum and ra < self.sampled_graph.degree(str(node_set[j+1]))/degree_sum:
                         start_node = node_set[j]
                         break
+            query_result = self.egraph.query_node(start_node,n_attribute)
+            new_node = choice(query_result)
             self.update_graph(start_node,new_node)
             i += 1
 

@@ -6,6 +6,31 @@ from random_walk import *
 
 class MIRandomWalk(Algorithm):
 
+    def random_walk_update_graph(self, start_node, new_node):
+        g = self.sampled_graph
+        start_id = g.vs['name'].index(start_node)
+        if new_node['name'] not in g.vs['name']:
+            g.add_vertex(**new_node)
+            index = g.vs['name'].index(new_node['name'])
+            g.add_edge(start_id,index)
+        else:
+            index = g.vs['name'].index(new_node['name'])
+            if g.get_eid(start_id, index, directed=False, error=False) == -1:
+                g.add_edge(start_id,index)
+
+
+    def random_walk_run(self,k):
+        start_node = choice(self.sampled_graph.vs['name'])
+        n_attribute = len(self.sampled_graph.vertex_attributes())-2
+        i = 0
+
+        while i < k:
+            query_result = self.egraph.query_node(start_node,n_attribute)
+            new_node = choice(query_result)
+            self.random_walk_update_graph(start_node,new_node)
+            start_node = new_node['name']
+            i += 1
+
     def update_graph(self, start_node, new_node):
         g = self.sampled_graph
         start_id = g.vs['name'].index(start_node)
@@ -22,19 +47,10 @@ class MIRandomWalk(Algorithm):
     def run(self,k,m=10):
         n_attribute = len(self.sampled_graph.vertex_attributes())-2
         i = 0
-        node_set = random.sample(self.sampled_graph.vs['name'],m)
+        node_set = sample(self.sampled_graph.vs['name'],m)
 
-        while i < k:
-            query_result = self.egraph.query_node(start_node,n_attribute)
-            new_node = choice(query_result)
-            self.update_graph(start_node,new_node)
-            '''for s in node_set:
-                graph_sub = random_walk(G,s,times)
-                sub_G.add_edges_from(graph_sub.edges(data=True))'''
-            if random() < p_jump:
-                start_node = choice(self.sampled_graph.vs['name'])
-            else:
-                start_node = new_node['name']
+        while i < m:
+            self.random_walk_run(k/m)
             i += 1
 
 if __name__ == "__main__":
