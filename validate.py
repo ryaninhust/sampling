@@ -1,13 +1,17 @@
 from pymongo import MongoClient
 from scipy.stats import entropy
+from math import log, e
 
 mc = MongoClient()
 db = mc.test
 
 
 def valide_dis(origin_dis, test_dis):
-    kl = entropy(origin_dis, test_dis)
-    return kl
+    #kl = entropy(origin_dis, test_dis)
+    total = 0
+    for i in range(len(origin_dis)):
+        total += origin_dis[i] * log(origin_dis[i]/test_dis[i], e)
+    return total
 
 
 def fetch_origin_degs_list(collection):
