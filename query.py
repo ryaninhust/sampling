@@ -3,8 +3,8 @@ from igraph import Graph
 
 DOMAIN_PATH = "http://140.112.31.186"
 TEAM_SECRET = "h6Qtbh81js"
-SEED_URL_PARSE = "{0}/SNA2014/hw3/query.php?team={1}"
-NODE_URL_PARSE = "{0}/SNA2014/hw3/query.php?team={1}&node={2}"
+SEED_URL_PARSE = "{0}/SNA2014/hw3/query_public.php?team={1}"
+NODE_URL_PARSE = "{0}/SNA2014/hw3/query_public.php?team={1}&node={2}"
 
 def query_seed():
     data = get(SEED_URL_PARSE.format(DOMAIN_PATH, TEAM_SECRET))
