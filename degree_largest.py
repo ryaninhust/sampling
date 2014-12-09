@@ -1,6 +1,6 @@
 from random import sample,random,choice
 from core import Algorithm
-from egraphs import FBEgoGraph
+from egraphs import RemoteGraph
 
 class DegreeLargest(Algorithm):
 
@@ -33,6 +33,6 @@ class DegreeLargest(Algorithm):
             i += 1
 
 if __name__ == "__main__":
-    fbego_graph = FBEgoGraph('data/egofb.txt')
-    fuck_rj = RandomJump(fbego_graph)
-    print fuck_rj.validate()
+    fbego_graph = RemoteGraph('data/public.txt')
+    fuck_dl = DegreeLargest(fbego_graph)
+    print fuck_dl.validate()
