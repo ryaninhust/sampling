@@ -4,17 +4,18 @@ from egraphs import FBEgoGraph
 
 class DegreeLargest(Algorithm):
 
-    def update_graph(self, start_node, new_node):
+    def update_graph(self, start_node, result):
         g = self.sampled_graph
         start_id = g.vs['name'].index(start_node)
-        if new_node['name'] not in g.vs['name']:
-            g.add_vertex(**new_node)
-            index = g.vs['name'].index(new_node['name'])
-            g.add_edge(start_id,index)
-        else:
-            index = g.vs['name'].index(new_node['name'])
-            if g.get_eid(start_id, index, directed=False, error=False) == -1:
+        for node in result:
+            if node['name'] not in g.vs['name']:
+                g.add_vertex(**node)
+                index = g.vs['name'].index(node['name'])
                 g.add_edge(start_id,index)
+            else:
+                index = g.vs['name'].index(node['name'])
+                if g.get_eid(start_id, index, directed=False, error=False) == -1:
+                    g.add_edge(start_id,index)
 
     def degree_largest(self):
         full_degree = self.sampled_graph.vs['degree']
