@@ -1,6 +1,6 @@
 import os
 from collections import Counter
-from validate import validate_sampling
+from validate import validate_sampling, validate_attribute
 
 class AlgorithmNoResultError(Exception):
     pass
@@ -12,11 +12,13 @@ class Algorithm(object):
     degree_dis = None
     top_k = 100
     top_k_closeness = None
+    queried_nodes = None
 
     def __init__(self, egraph):
         self.egraph = egraph
         self.sampled_graph = egraph.seed_graph.copy()
         self.origin_graph = egraph.origin_graph
+        self.queried_nodes = []
 
     def __str__(self):
         return self.name
@@ -24,20 +26,24 @@ class Algorithm(object):
         raise NotImplementedError
 
     def _validate(self):
+        validate_attribute(self, 5)
         close_validate, kl = validate_sampling(self)
         return close_validate, kl
 
     def validate(self, k=300):
         self.run(k)
+        self.output_back_sumbission()
         #if self.sampled_graph.vcount() == self.egraph.seed_graph.vcount():
         #    raise AlgorithmNoResultError
-        self.cal_sample_degree_dist()
-        self.cal_clossness_rank()
-        close_validate, kl = self._validate()
-        return close_validate, kl
+#        self.cal_sample_degree_dist()
+#        self.cal_clossness_rank()
+#        close_validate, kl = self._validate()
+#        return close_validate, kl
 
     def cal_sample_degree_dist(self):
         sampled_degree = [int(v['degree']) for v in self.sampled_graph.vs]
+
+        #sampled_degree = self.sampled_graph.degree()
         self.degree_dis = self.cal_degree_dist(sampled_degree)
 
     def cal_degree_dist(self, degree):
@@ -74,12 +80,22 @@ class Algorithm(object):
             rank_clossness.append((v['name'], v.closeness()))
         rank_clossness.sort(key=lambda x: x[1], reverse=True)
         self.top_k_closeness = rank_clossness[:self.top_k]
+
+    def output_back_sumbission(self):
+        path = 'result/%s_%s' % (self.name, self.egraph.name)
+        os.mkdir(path)
+        with open(path+'/sample1.txt', 'w') as sample:
+            for i in self.sampled_graph.es:
+                sample.write('%s %s\n' % (self.sampled_graph.vs[i.source]['name'],
+                                          self.sampled_graph.vs[i.target]['name']))
+
     def output_submission(self):
         path = 'result/%s_%s' % (self.name, self.egraph.name)
         os.mkdir(path)
         with open(path+'/sample.txt', 'w') as sample:
             for i in self.sampled_graph.es:
-                sample.write('%s %s\n' % (i.source, i.target))
+                sample.write('%s %s\n' % (self.sampled_graph.vs[i.source]['name'],
+                                          self.sampled_graph.vs[i.target]['name']))
         with open(path+'/closeness.txt', 'w') as closeness:
             for i in self.top_k_closeness:
                 closeness.write('%s\n' % i[0])
