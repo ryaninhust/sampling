@@ -12,12 +12,24 @@ def query_seed():
     return g
 
 
+class GameEnd(Exception):
+    pass
+
+
 def query_single_node(node, node_attribute_count):
-    data = get(NODE_URL_PARSE.format(DOMAIN_PATH, TEAM_SECRET, node)).content
+    url = NODE_URL_PARSE.format(DOMAIN_PATH, TEAM_SECRET, node)
+    print url
+    data = get(url).content
+    print data
+    with open('data/website/%s' % node, 'w') as bp:
+        bp.write(data)
     nodes_list = []
     lines = data.splitlines()
     for i in lines[3:]:
-        node_dict = parse_neighours(i, node_attribute_count)
+        try:
+            node_dict = parse_neighours(i, node_attribute_count)
+        except:
+            raise GameEnd
         nodes_list.append(node_dict)
     return nodes_list
 
